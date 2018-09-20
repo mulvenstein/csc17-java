@@ -1,8 +1,14 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class firstUniqChar {
     
     // char to find in string
     private char m_toFind;
-    
+    public int lowest=999;
+
+    public HashMap<Character, Integer> m_map = new HashMap<Character, Integer>();
+
     // constructor (default)
     firstUniqChar(){
         // basic object char to find will be 'a'
@@ -27,11 +33,32 @@ class firstUniqChar {
     // mutator to char to find
 
     public int SolutionFirstUniqChar(String s) {
+        int index;
+        lowest = 999;
         for(int i=0; i<s.length(); i++){
-            if(this.get_toFind() == s.charAt(i)){
-                return i;
+            // if(this.get_toFind() == s.charAt(i)){
+            //     return i;
+            // }
+            if(m_map.containsKey(s.charAt(i))){
+                // key exists, so it isnt unique. set val to -1
+                m_map.computeIfPresent(s.charAt(i), (k, v) -> v = -1);
+            } else {
+                // place
+                m_map.put(s.charAt(i), i);
             }
         }
-        return -1;
+
+        for (Map.Entry<Character, Integer> entry : m_map.entrySet()) {    
+            char key = entry.getKey();
+            Integer value = entry.getValue();
+            //System.out.println(key + " " + value);
+            if (lowest > value && value >= 0) {
+                lowest = value;
+                //System.out.println("lowest : " + lowest);
+            }
+        }
+        this.m_map.clear();
+        return lowest;
     }
+    
 }
